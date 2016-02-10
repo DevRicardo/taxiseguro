@@ -14,6 +14,7 @@
     {!! Html::style("css/lib/dataTable.css") !!}
     {!! Html::style("css/lib/bootstrap-datepicker.css") !!}
     {!! Html::style("css/font-awesome/css/font-awesome.css") !!}
+    {!! Html::style("select2/css/select2.css") !!}
 
 
     <!-- Styles
@@ -111,9 +112,14 @@
     {!! Html::script('js/lib/dataTables-1.10.js') !!}
     {!! Html::script('js/lib/bootstrap-datepicker.js') !!}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {!! Html::script('select2/js/select2.js') !!}
     <script>
         $('.tiempo').datepicker({
             format: 'yyyy-mm-dd'
+        });
+        $("#conductor_id").select2({
+            maximumSelectionLength: 2
+
         });
         @yield('script')
     </script>

@@ -194,13 +194,20 @@
 				<legend>Conductores</legend>
 			<div class="row">
 
-				<div class="col-md-4 col-lg-offset-1">
+				<div class="col-md-10 col-lg-offset-1">
+					<div class="form-group">
+						<label class="control-label" for="toperacion_id">Conductores</label>
+						<div class="">
+							<select name="conductor_id" id="conductor_id"  multiple="multiple" class="form-control">
+								<option value="AL">Jose GEronimo valencia</option>
+								<option value="AT">Tamaulipa Gonzales romero</option>
+							</select>
+						</div>
+					</div>
 
 				</div>
 
-				<div class="col-md-4 col-lg-offset-1">
 
-				</div>
 
 			</div>
 		</fieldset>
