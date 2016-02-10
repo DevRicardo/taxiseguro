@@ -199,8 +199,11 @@
 						<label class="control-label" for="toperacion_id">Conductores</label>
 						<div class="">
 							<select name="conductor_id" id="conductor_id"  multiple="multiple" class="form-control">
-								<option value="AL">Jose GEronimo valencia</option>
-								<option value="AT">Tamaulipa Gonzales romero</option>
+								@foreach($conductores AS $conductor)
+								    <option value="{!! $conductor->id !!}">
+										{!! $conductor->cc." ".$conductor->nombres." ".$conductor->apellidos !!}
+									</option>
+								@endforeach
 							</select>
 						</div>
 					</div>

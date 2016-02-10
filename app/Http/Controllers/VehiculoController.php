@@ -6,6 +6,7 @@ use Laracasts\Flash\Flash;
 use App\Http\Controllers\Controller;
 use App\Vehiculo;
 use App\User;
+use App\Conductor;
 use DB;
 use Validator;
 use Auth;
@@ -37,7 +38,8 @@ class VehiculoController extends Controller
      */
     public function create()
     {
-       return view("vehiculo.new"); 
+        $conductores = Conductor::all();
+        return view("vehiculo.new")->with("conductores", $conductores);
     }
 	
 	/**
@@ -48,6 +50,7 @@ class VehiculoController extends Controller
      */
     public function store(Request $request)
     {
+            //dd($request->all());
     	    $rules = ['placa' => 'required','movil' => 'required','marca' => 'required','modelo' => 'required','soat' => 'required','vigenciasoat' => 'required','tecnomecanica' => 'required','vigenciatm' => 'required','seguroct' => 'required','vigenciact' => 'required','seguroect' => 'required','vigenciaect' => 'required','toperacion_id' => 'required',];
             $validar = Validator::make($request->all(), $rules);
 
@@ -57,15 +60,28 @@ class VehiculoController extends Controller
                 ->withInput()
                 ->withErrors($validar->errors());
             }
+            try{
+
+                DB::beginTransaction();
+                $vehiculo = new Vehiculo();
+                $vehiculo->placa = $request->placa;$vehiculo->movil = $request->movil;$vehiculo->marca = $request->marca;$vehiculo->modelo = $request->modelo;$vehiculo->soat = $request->soat;$vehiculo->vigenciasoat = $request->vigenciasoat;$vehiculo->tecnomecanica = $request->tecnomecanica;$vehiculo->vigenciatm = $request->vigenciatm;$vehiculo->seguroct = $request->seguroct;$vehiculo->vigenciact = $request->vigenciact;$vehiculo->seguroect = $request->seguroect;$vehiculo->vigenciaect = $request->vigenciaect;$vehiculo->toperacion_id = $request->toperacion_id;
+                $vehiculo->save();
+                $id_vehiculo = $vehiculo->id;
+                $conductor_id = $request->conductor_id;
+                $vehiculo->conductores()->attach($conductor_id,['estado' => 1]);
+                DB::commit();
+
+            }catch (\Exception $e){
+
+                DB::rollBack();
+
+            }
+
+
 
             Flash::success("Registro corecto");
-
-            $vehiculo = new Vehiculo();
-            $vehiculo->placa = $request->placa;$vehiculo->movil = $request->movil;$vehiculo->marca = $request->marca;$vehiculo->modelo = $request->modelo;$vehiculo->soat = $request->soat;$vehiculo->vigenciasoat = $request->vigenciasoat;$vehiculo->tecnomecanica = $request->tecnomecanica;$vehiculo->vigenciatm = $request->vigenciatm;$vehiculo->seguroct = $request->seguroct;$vehiculo->vigenciact = $request->vigenciact;$vehiculo->seguroect = $request->seguroect;$vehiculo->vigenciaect = $request->vigenciaect;$vehiculo->toperacion_id = $request->toperacion_id;
-            $vehiculo->save();
-          
         
-        return redirect()->back();
+            return redirect()->back();
 	}
 
     /**
