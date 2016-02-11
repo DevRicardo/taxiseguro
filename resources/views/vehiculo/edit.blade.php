@@ -205,6 +205,7 @@
 								<select name="conductor_id[]" id="conductor_id"  multiple="multiple" class="form-control">
 									@foreach($vehiculo->conductores()->get() AS $conductor)
 										<option value="{!! $conductor->id !!}">
+
 											{!! $conductor->cc." ".$conductor->nombres." ".$conductor->apellidos !!}
 										</option>
 									@endforeach
@@ -217,6 +218,12 @@
 
 
 				</div>
+
+				@foreach($vehiculo->conductores()->get() AS $conductor)
+
+						<input type="hidden" name="c_id[]"  value="{!! $conductor->id !!}">
+
+				@endforeach
 			</fieldset>
 
 
@@ -239,5 +246,16 @@
         </div>
     </div>
 {!! Form::close() !!}
+
+@endsection
+
+@section('script')
+	var id=[];
+	var conteo = 0;
+    $("input[name*='c_id']").each(function(){
+	    id[conteo] = this.value
+	    conteo++;
+	});
+	$("#conductor_id").val(id).trigger("change")
 
 @endsection
