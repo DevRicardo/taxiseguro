@@ -198,7 +198,7 @@
 					<div class="form-group">
 						<label class="control-label" for="toperacion_id">Conductores</label>
 						<div class="">
-							<select name="conductor_id" id="conductor_id"  multiple="multiple" class="form-control">
+							<select name="conductor_id[]" id="conductor_id"  multiple="multiple" class="form-control">
 								@foreach($conductores AS $conductor)
 								    <option value="{!! $conductor->id !!}">
 										{!! $conductor->cc." ".$conductor->nombres." ".$conductor->apellidos !!}

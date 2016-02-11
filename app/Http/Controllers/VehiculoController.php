@@ -68,7 +68,9 @@ class VehiculoController extends Controller
                 $vehiculo->save();
                 $id_vehiculo = $vehiculo->id;
                 $conductor_id = $request->conductor_id;
-                $vehiculo->conductores()->attach($conductor_id,['estado' => 1]);
+                foreach($conductor_id as $value) {
+                    $vehiculo->conductores()->attach($value, ['estado' => 1]);
+                }
                 DB::commit();
 
             }catch (\Exception $e){
