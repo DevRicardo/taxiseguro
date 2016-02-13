@@ -34,6 +34,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'HomeController@index');
 
 
+    Route::get('/listado/{propietario}',"VehiculoController@listado");
     Route::resource("/vehiculo", "VehiculoController");
     Route::resource("/conductor", "ConductorController");
+    Route::post('asignar/{vehiculo}/{propietario}',"PropietarioController@asignar");
+    Route::resource("/propietario", "PropietarioController");
 });

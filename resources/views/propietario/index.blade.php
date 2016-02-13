@@ -1,11 +1,11 @@
-@extends("layout.layout")
+@extends("layouts.app")
 
-@section("contenido")
+@section("content")
 
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
-    <li><a href="#">Inicio</a></li>
-    <li><a href="#">Propietario</a></li>
+    <li><a href="/">Inicio</a></li>
+    <li><a href="/propietario">Propietario</a></li>
     <li><a href="#">Listado</a></li>
 </ul> 
 <!-- END BREADCRUMB -->
@@ -21,40 +21,35 @@
         <div class="table-responsive">
             <table class="table datatable"><thead>
 			    		<tr>
-					     <th>Id</th>
+
 						    <th>Cc</th>
 						    <th>Nombres</th>
 						    <th>Apellidos</th>
 						    <th>Direccion</th>
 						    <th>Telefono</th>
 						    <th>Email</th>
-						    <th>Detalle</th>
-						<th>Editar</th>
-					    <th>Eliminar</th>
+						    <th>Acciones</th>
 					 </tr>
 					</thead>
 					<tbody>@foreach ($propietarios as $valor)								
 								<tr>
-								<td>{!! $valor->id !!}</td>
+
 						    <td>{!! $valor->cc !!}</td>
 						    <td>{!! $valor->nombres !!}</td>
 						    <td>{!! $valor->apellidos !!}</td>
 						    <td>{!! $valor->direccion !!}</td>
 						    <td>{!! $valor->telefono !!}</td>
 						    <td>{!! $valor->email !!}</td>
-						    <td>
-						<a href="propietario/{!! $valor->id !!}" class="btn btn-sm btn-default" >
-				    		<span class="glyphicon glyphicon-eye-open"></span>
-				    	</a>
-				    	</td>
-						<td>
-						<a href="propietario/{!! $valor->id !!}/edit" class="btn btn-sm btn-info" >
-				    		<span class="glyphicon glyphicon-pencil"></span>
-				    	</a>
-				    	</td>
+
 						<td>
 					    {!! Form::open(array("url" => "propietario/".$valor->id, "method" => "DELETE")) !!}
-					        <button type="submit" class="btn btn-sm btn-danger" >
+							<a href="propietario/{!! $valor->id !!}" class="btn btn-sm btn-default" >
+								<span class="fa fa-taxi"></span>
+							</a>
+							<a href="propietario/{!! $valor->id !!}/edit" class="btn btn-sm btn-info" >
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+							<button type="submit" class="btn btn-sm btn-danger" >
 				    		    <span class="glyphicon glyphicon-remove"></span>
 				    	    </button>
                         {!! Form::close() !!}

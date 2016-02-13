@@ -14,4 +14,8 @@ class Vehiculo extends Model
     public function conductores(){
         return $this->belongsToMany('App\Conductor')->withPivot('targetacontrol_id', 'estado');
     }
+
+    public function propietarios(){
+        return $this->belongsToMany('App\Propietario')->withPivot('fecha', 'estado');
+    }
 }

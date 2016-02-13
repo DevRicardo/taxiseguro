@@ -39,7 +39,7 @@
 
 
 						<td>
-					    {!! Form::open(array("url" => "vehiculo/".$valor->id, "method" => "DELETE")) !!}
+					    {!! Form::open(array("url" => "vehiculo/".$valor->id, "method" => "DELETE","class"=>"form-delete")) !!}
 
 							<a href="vehiculo/{!! $valor->id !!}" class="btn btn-sm btn-default" >
 								<span class="glyphicon glyphicon-eye-open"></span>
@@ -69,6 +69,13 @@
 @section("script")
 
 $(document).ready(function(){
+    // eventos -----------------------
+    eventDelete ();
+
+
+
+    //--------------------------------
+
    	if($(".datatable").length > 0){                
         $(".datatable").dataTable({
            	"sPaginationType": "full_numbers",
@@ -104,3 +111,6 @@ $(document).ready(function(){
 });
 
 @endsection
+
+{!! Html::script('js/vehiculo/eliminar.js') !!}
+{!! Html::script('js/vehiculo/vehiculo.js') !!}

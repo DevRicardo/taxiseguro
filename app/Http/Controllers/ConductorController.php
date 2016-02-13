@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Laracasts\Flash\Flash;
 use App\Conductor;
+use App\Vehiculo;
 use App\User;
 use DB;
 use Validator;
@@ -26,10 +27,12 @@ class ConductorController extends Controller
      */
     public function index()
     {
-    	$conductore = array();
+
     	$conductor = Conductor::all();
+
     	        	    
-	    return view("conductor.index")->with("conductores", $conductor);
+	    return view("conductor.index")
+            ->with("conductores", $conductor);
     }
 
     /**
@@ -39,7 +42,10 @@ class ConductorController extends Controller
      */
     public function create()
     {
-       return view("conductor.new");
+        $vehiculos = Vehiculo::all();
+
+       return view("conductor.new")
+           ->with('vehiculos',$vehiculos);
     }
 	
 	/**
@@ -60,20 +66,38 @@ class ConductorController extends Controller
                 ->withErrors($validar->errors());
             }
 
+            try{
+                DB::beginTransaction();
+                    $conductor = new Conductor();
+                    $conductor->cc = $request->cc;
+                    $conductor->nombres = $request->nombres;
+                    $conductor->apellidos = $request->apellidos;
+                    $conductor->direccion = $request->direccion;
+                    $conductor->telefono = $request->telefono;
+                    $conductor->email = $request->email;
+                    $conductor->categoria = $request->categoria;
+                    $conductor->vigencia = $request->vigencia;
+                    $conductor->eps = $request->eps;
+                    $conductor->arl = $request->arl;
+                    $conductor->save();
+
+                    $vehiculo_id = $request->vehiculo_id;
+
+                    foreach($vehiculo_id as $value) {
+                        $conductor->vehiculos()->attach($value, ['estado' => 1]);
+                    }
+
+
+                DB::commit();
+
+            }catch (\Exception $e){
+                dd($e);
+                DB::rollBack();
+            }
+
             Flash::success("Registro corecto");
 
-            $conductor = new Conductor();
-            $conductor->cc = $request->cc;
-            $conductor->nombres = $request->nombres;
-            $conductor->apellidos = $request->apellidos;
-            $conductor->direccion = $request->direccion;
-            $conductor->telefono = $request->telefono;
-            $conductor->email = $request->email;
-            $conductor->categoria = $request->categoria;
-            $conductor->vigencia = $request->vigencia;
-            $conductor->eps = $request->eps;
-            $conductor->arl = $request->arl;
-            $conductor->save();
+
           
         
         return redirect()->back();
@@ -87,8 +111,11 @@ class ConductorController extends Controller
      */
     public function show($id)
     {
+        $vehiculos = Vehiculo::all();
         $conductore = Conductor::find($id);
-	    return view("conductor.show")->with("conductore", $conductore);
+	    return view("conductor.show")
+            ->with("conductore", $conductore)
+            ->with("vehiculos",$vehiculos);
     }
 		
 	/**
@@ -99,8 +126,11 @@ class ConductorController extends Controller
 	 */
 	public function edit($id)
 	{
+        $vehiculos = Vehiculo::all();
 	    $conductore = Conductor::find($id);
-	    return view("conductor.edit")->with("conductore", $conductore);
+	    return view("conductor.edit")
+            ->with("conductore", $conductore)
+            ->with('vehiculos',$vehiculos);
 	}
 
 	/**
@@ -126,10 +156,25 @@ class ConductorController extends Controller
 
             Flash::success("Actualización corecta");
 
+            try{
+                DB::beginTransaction();
 
-	        $conductore = Conductor::find($id);
-	        $conductore->cc = $request->cc;$conductore->nombres = $request->nombres;$conductore->apellidos = $request->apellidos;$conductore->direccion = $request->direccion;$conductore->telefono = $request->telefono;$conductore->email = $request->email;$conductore->categoria = $request->categoria;$conductore->vigencia = $request->vigencia;$conductore->eps = $request->eps;$conductore->arl = $request->arl;
-            $conductore->save();
+                $conductore = Conductor::find($id);
+                $conductore->cc = $request->cc;$conductore->nombres = $request->nombres;$conductore->apellidos = $request->apellidos;$conductore->direccion = $request->direccion;$conductore->telefono = $request->telefono;$conductore->email = $request->email;$conductore->categoria = $request->categoria;$conductore->vigencia = $request->vigencia;$conductore->eps = $request->eps;$conductore->arl = $request->arl;
+                $conductore->save();
+                DB::table('conductor_vehiculo')->where('conductor_id',$id)->delete();
+                $vehiculo_id = $request->vehiculo_id;
+                foreach($vehiculo_id as $value) {
+                    $conductore->vehiculos()->attach($value, ['estado' => 1]);
+                }
+                DB::commit();
+            }catch (\Exception $e){
+                dd($e);
+                DB::rollBack();
+            }
+
+
+
         
         return redirect()->back();
 	}

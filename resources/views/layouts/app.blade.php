@@ -60,19 +60,26 @@
                     <li>
                         <a  href="{{ url('/vehiculo') }}">
                             <span class="fa fa-taxi" aria-hidden="true"></span>
-                            Gestión de vehiculos
+                            Vehiculos
                         </a>
                     </li>
                     <li>
                         <a  href="{{ url('/conductor') }}">
                             <span class="fa fa-users" aria-hidden="true"></span>
-                            Gestión de operarios
+                            Operarios
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/') }}">
+                        <a href="{{ url('/propietario') }}">
                             <span class="fa fa-male" aria-hidden="true"></span>
-                            Gestión de propietarios
+                            Propietarios
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url('/agentes') }}">
+                            <span class="fa fa-male" aria-hidden="true"></span>
+                            Agentes de trancito
                         </a>
                     </li>
 
@@ -118,6 +125,11 @@
             format: 'yyyy-mm-dd'
         });
         $("#conductor_id").select2({
+            maximumSelectionLength: 2
+
+        });
+
+        $("#vehiculo_id").select2({
             maximumSelectionLength: 2
 
         });

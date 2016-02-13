@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
 use App\Propietario;
+use App\Vehiculo;
 use App\User;
 use DB;
 use Validator;
@@ -25,7 +27,7 @@ class PropietarioController extends Controller
      */
     public function index()
     {
-    	$propietario = array();
+
     	$propietario = Propietario::all();
     	        	    
 	    return view("propietario.index")->with("propietarios", $propietario);
@@ -53,10 +55,10 @@ class PropietarioController extends Controller
             $validar = Validator::make($request->all(), $rules);
 
             if($validar->fails()){
-            	Flash::error("Error en la validación de datos")
+            	Flash::error("Error en la validación de datos");
                 return redirect()->back()
                 ->withInput()
-                ->withErrors($validad->errors());
+                ->withErrors($validar->errors());
             }
 
             Flash::success("Registro corecto");
@@ -78,7 +80,10 @@ class PropietarioController extends Controller
     public function show($id)
     {
         $propietario = Propietario::find($id);
-	    return view("propietario.show")->with("propietarios", $propietario);   
+        $vehiculos = $propietario->vehiculos()->get();
+	    return view("propietario.show")
+            ->with("propietarios", $propietario)
+            ->with("vehiculos",$vehiculos);
     }
 		
 	/**
@@ -90,7 +95,7 @@ class PropietarioController extends Controller
 	public function edit($id)
 	{
 	    $propietario = Propietario::find($id);
-	    return view("propietario.edit")->with("propietarios", $propietario);
+	    return view("propietario.edit")->with("propietario", $propietario);
 	}
 
 	/**
@@ -108,10 +113,10 @@ class PropietarioController extends Controller
             $validar = Validator::make($request->all(), $rules);
 
             if($validar->fails()){
-            	Flash::error("Error en la validación de datos")
+            	Flash::error("Error en la validación de datos");
                 return redirect()->back()
                 ->withInput()
-                ->withErrors($validad->errors());
+                ->withErrors($validar->errors());
             }
 
             Flash::success("Actualización corecta");
@@ -139,5 +144,16 @@ class PropietarioController extends Controller
   
 
     	return redirect()->back();  
+    }
+
+    public function asignar($vehiculo, $propietario){
+
+        $propietario = Propietario::find($propietario);
+        $propietario->vehiculos()->attach($vehiculo, ['fecha'=>date("Y-m-d"),'estado' => 1]);
+
+        Flash::success("Asignación correcta");
+
+        return redirect()->back();
+
     }
 }

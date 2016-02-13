@@ -95,7 +95,8 @@ class VehiculoController extends Controller
     public function show($id)
     {
         $vehiculo = Vehiculo::find($id);
-	    return view("vehiculo.show")->with("vehiculo", $vehiculo);
+        $conductores = Conductor::all();
+        return view("vehiculo.show")->with("vehiculo", $vehiculo)->with('conductores',$conductores);
     }
 		
 	/**
@@ -107,7 +108,8 @@ class VehiculoController extends Controller
 	public function edit($id)
 	{
 	    $vehiculo = Vehiculo::find($id);
-	    return view("vehiculo.edit")->with("vehiculo", $vehiculo);
+        $conductores = Conductor::all();
+	    return view("vehiculo.edit")->with("vehiculo", $vehiculo)->with('conductores',$conductores);
 	}
 
 	/**
@@ -133,11 +135,29 @@ class VehiculoController extends Controller
 
             Flash::success("Actualización corecta");
 
+        try{
 
-	        $vehiculo = Vehiculo::find($id);
-	        $vehiculo->placa = $request->placa;$vehiculo->movil = $request->movil;$vehiculo->marca = $request->marca;$vehiculo->modelo = $request->modelo;$vehiculo->soat = $request->soat;$vehiculo->vigenciasoat = $request->vigenciasoat;$vehiculo->tecnomecanica = $request->tecnomecanica;$vehiculo->vigenciatm = $request->vigenciatm;$vehiculo->seguroct = $request->seguroct;$vehiculo->vigenciact = $request->vigenciact;$vehiculo->seguroect = $request->seguroect;$vehiculo->vigenciaect = $request->vigenciaect;$vehiculo->toperacion_id = $request->toperacion_id;
+            DB::beginTransaction();
+
+            $vehiculo = Vehiculo::find($id);
+            $vehiculo->placa = $request->placa;$vehiculo->movil = $request->movil;$vehiculo->marca = $request->marca;$vehiculo->modelo = $request->modelo;$vehiculo->soat = $request->soat;$vehiculo->vigenciasoat = $request->vigenciasoat;$vehiculo->tecnomecanica = $request->tecnomecanica;$vehiculo->vigenciatm = $request->vigenciatm;$vehiculo->seguroct = $request->seguroct;$vehiculo->vigenciact = $request->vigenciact;$vehiculo->seguroect = $request->seguroect;$vehiculo->vigenciaect = $request->vigenciaect;$vehiculo->toperacion_id = $request->toperacion_id;
             $vehiculo->save();
-        
+            $id_vehiculo = $vehiculo->id;
+            $conductor_id = $request->conductor_id;
+            DB::table('conductor_vehiculo')->where('vehiculo_id',$id)->delete();
+            foreach($conductor_id as $value) {
+                $vehiculo->conductores()->attach($value, ['estado' => 1]);
+            }
+            DB::commit();
+
+        }catch (\Exception $e){
+
+            DB::rollBack();
+            dd($e);
+        }
+
+
+
         return redirect()->back();
 	}
 
@@ -156,5 +176,15 @@ class VehiculoController extends Controller
   
 
     	return redirect()->back();  
+    }
+
+
+    public function listado($propietario)
+    {
+        $vehiculo = Vehiculo::all();
+
+        return view("propietario.listavehiculos")
+            ->with("vehiculos", $vehiculo)
+            ->with("propietario",$propietario);
     }
 }
