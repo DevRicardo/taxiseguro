@@ -38,5 +38,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::resource("/vehiculo", "VehiculoController");
     Route::resource("/conductor", "ConductorController");
     Route::post('asignar/{vehiculo}/{propietario}',"PropietarioController@asignar");
+    Route::get('desasignar/{vehiculo}/{propietario}',"PropietarioController@desasignar");
     Route::resource("/propietario", "PropietarioController");
+    Route::resource("/agente", "AgenteController");
 });

@@ -51,6 +51,7 @@ class PropietarioController extends Controller
      */
     public function store(Request $request)
     {
+
     	    $rules = ['cc' => 'required','nombres' => 'required','apellidos' => 'required','direccion' => 'required','telefono' => 'required','email' => 'required',];
             $validar = Validator::make($request->all(), $rules);
 
@@ -155,5 +156,15 @@ class PropietarioController extends Controller
 
         return redirect()->back();
 
+    }
+
+
+    public function desasignar($vehiculo, $propietario){
+        $propietario = Propietario::find($propietario);
+        $propietario->vehiculos()->detach($vehiculo);
+
+        Flash::success("Operacion correcta");
+
+        return redirect()->back();
     }
 }

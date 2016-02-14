@@ -53,10 +53,10 @@ class AseguradoraController extends Controller
             $validar = Validator::make($request->all(), $rules);
 
             if($validar->fails()){
-            	Flash::error("Error en la validación de datos")
+            	Flash::error("Error en la validación de datos");
                 return redirect()->back()
                 ->withInput()
-                ->withErrors($validad->errors());
+                ->withErrors($validar->errors());
             }
 
             Flash::success("Registro corecto");
@@ -108,10 +108,10 @@ class AseguradoraController extends Controller
             $validar = Validator::make($request->all(), $rules);
 
             if($validar->fails()){
-            	Flash::error("Error en la validación de datos")
+            	Flash::error("Error en la validación de datos");
                 return redirect()->back()
                 ->withInput()
-                ->withErrors($validad->errors());
+                ->withErrors($validar->errors());
             }
 
             Flash::success("Actualización corecta");

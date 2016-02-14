@@ -9,6 +9,7 @@
     <li><a href="#">Listado de vehiculos</a></li>
 </ul>
 <!-- END BREADCRUMB -->
+@include("flash::message")
 <form class="form-horizontal">
     <div class="panel panel-warning">
         <div class="panel-heading">
@@ -22,7 +23,8 @@
         <div class="panel-body">
 
 			<div class="table-responsive">
-				<table class="table datatable"><thead>
+				<table class="table datatable">
+					<thead>
 					<tr>
 
 						<th>#</th>
@@ -32,16 +34,17 @@
 					</tr>
 					</thead>
 					<tbody>
+					<?php $con = 1; ?>
 					    @foreach ($vehiculos as $valor)
 
 							<tr>
-								<td></td>
+								<td>{!! $con !!}</td>
 								<td>{!! $valor->placa !!}</td>
-								<td>{!! $valor->movil !!}</td>
+								<td>{!! $valor->movil !!} <form name="ss"></form></td>
 
 
 								<td>
-									{!! Form::open(array("url" => "", "method" => "POST","class"=>"form-delete")) !!}
+									{!! Form::open(array("url" => "desasignar/".$valor->id."/".$propietarios->id, "method" => "GET")) !!}
 
 									<button type="submit" class="btn btn-sm btn-danger" >
 										<span class="glyphicon glyphicon-trash"></span>
@@ -50,7 +53,7 @@
 
 								</td>
 							</tr>
-
+                        <?php $con++;  ?>
 					    @endforeach
 
 			        </tbody>

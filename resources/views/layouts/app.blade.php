@@ -77,7 +77,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ url('/agentes') }}">
+                        <a href="{{ url('/agente') }}">
                             <span class="fa fa-male" aria-hidden="true"></span>
                             Agentes de trancito
                         </a>
